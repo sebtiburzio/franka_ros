@@ -33,6 +33,10 @@ cartesian_velocity_example_controller:
     type: franka_example_controllers/CartesianVelocityExampleController
     arm_id: $(arg arm_id)
 
+cartesian_velocity_trajectory_execution:
+    type: franka_example_controllers/CartesianVelocityTrajectoryExecution
+    arm_id: $(arg arm_id)
+
 model_example_controller:
     type: franka_example_controllers/ModelExampleController
     arm_id: $(arg arm_id)
