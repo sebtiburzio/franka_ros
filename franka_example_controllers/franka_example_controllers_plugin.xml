@@ -19,11 +19,6 @@
       A controller that executes a short motion based on cartesian velocities to demonstrate correct usage
     </description>
   </class>
-  <class name="franka_example_controllers/CartesianVelocityTrajectoryExecution" type="franka_example_controllers::CartesianVelocityTrajectoryExecution" base_class_type="controller_interface::ControllerBase">
-  <description>
-    A controller that executes the velocity example motion as a saved trajectory
-  </description>
-  </class>
   <class name="franka_example_controllers/ElbowExampleController" type="franka_example_controllers::ElbowExampleController" base_class_type="controller_interface::ControllerBase">
     <description>
       A controller that executes a short motion based on cartesian poses and elbow to demonstrate correct usage
@@ -59,4 +54,16 @@
           A PD controller that tracks position and velocity of the leader arm and applies it to the follower arm. It also applies force-feedback to the leader arm.
       </description>
   </class>
+
+  <class name="franka_example_controllers/CartesianPoseExampleControllerPulse" type="franka_example_controllers::CartesianPoseExampleControllerPulse" base_class_type="controller_interface::ControllerBase">
+    <description>
+      A controller that executes a pulse motion in the X direction
+    </description>
+  </class>
+  <class name="franka_example_controllers/CartesianVelocityTrajectoryExecution" type="franka_example_controllers::CartesianVelocityTrajectoryExecution" base_class_type="controller_interface::ControllerBase">
+  <description>
+    A controller that executes the velocity example motion as a saved trajectory
+  </description>
+  </class>
+  
 </library>

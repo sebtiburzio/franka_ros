@@ -75,7 +75,6 @@ add_library(franka_example_controllers
   src/elbow_example_controller.cpp
   src/cartesian_pose_example_controller.cpp
   src/cartesian_velocity_example_controller.cpp
-  src/cartesian_velocity_trajectory_execution.cpp
   src/joint_position_example_controller.cpp
   src/joint_velocity_example_controller.cpp
   src/model_example_controller.cpp
@@ -85,6 +84,9 @@ add_library(franka_example_controllers
   src/dual_arm_cartesian_impedance_example_controller.cpp
   src/teleop_joint_pd_example_controller.cpp
   src/joint_wall.cpp
+
+  src/cartesian_pose_example_controller_pulse.cpp
+  src/cartesian_velocity_trajectory_execution.cpp
 )
 
 add_dependencies(franka_example_controllers

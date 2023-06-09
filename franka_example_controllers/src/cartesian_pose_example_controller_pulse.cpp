@@ -1,6 +1,6 @@
 // Copyright (c) 2017 Franka Emika GmbH
 // Use of this source code is governed by the Apache-2.0 license, see LICENSE
-#include <franka_example_controllers/cartesian_pose_example_controller.h>
+#include <franka_example_controllers/cartesian_pose_example_controller_pulse.h>
 
 #include <cmath>
 #include <memory>
@@ -15,7 +15,7 @@
 
 namespace franka_example_controllers {
 
-bool CartesianPoseExampleController::init(hardware_interface::RobotHW* robot_hardware,
+bool CartesianPoseExampleControllerPulse::init(hardware_interface::RobotHW* robot_hardware,
                                           ros::NodeHandle& node_handle) {
   cartesian_pose_interface_ = robot_hardware->get<franka_hw::FrankaPoseCartesianInterface>();
   if (cartesian_pose_interface_ == nullptr) {
@@ -49,7 +49,7 @@ bool CartesianPoseExampleController::init(hardware_interface::RobotHW* robot_har
   try {
     auto state_handle = state_interface->getHandle(arm_id + "_robot");
 
-    std::array<double, 7> q_start{{0, -0.7156, 0, -1.693 , 0, 0.9774, 0}};
+    std::array<double, 7> q_start{{0, -0.7, 0, -1.9 , 0, 1.2, 0}};
     for (size_t i = 0; i < q_start.size(); i++) {
       if (std::abs(state_handle.getRobotState().q_d[i] - q_start[i]) > 0.1) {
         ROS_ERROR_STREAM(
@@ -68,12 +68,12 @@ bool CartesianPoseExampleController::init(hardware_interface::RobotHW* robot_har
   return true;
 }
 
-void CartesianPoseExampleController::starting(const ros::Time& /* time */) {
+void CartesianPoseExampleControllerPulse::starting(const ros::Time& /* time */) {
   initial_pose_ = cartesian_pose_handle_->getRobotState().O_T_EE_d;
   elapsed_time_ = ros::Duration(0.0);
 }
 
-void CartesianPoseExampleController::update(const ros::Time& /* time */,
+void CartesianPoseExampleControllerPulse::update(const ros::Time& /* time */,
                                             const ros::Duration& period) {
   elapsed_time_ += period;
 
@@ -93,5 +93,5 @@ void CartesianPoseExampleController::update(const ros::Time& /* time */,
 
 }  // namespace franka_example_controllers
 
-PLUGINLIB_EXPORT_CLASS(franka_example_controllers::CartesianPoseExampleController,
+PLUGINLIB_EXPORT_CLASS(franka_example_controllers::CartesianPoseExampleControllerPulse,
                        controller_interface::ControllerBase)
