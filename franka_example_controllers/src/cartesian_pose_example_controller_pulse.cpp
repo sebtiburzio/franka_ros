@@ -6,12 +6,16 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 #include <controller_interface/controller_base.h>
 #include <franka_hw/franka_cartesian_command_interface.h>
 #include <hardware_interface/hardware_interface.h>
 #include <pluginlib/class_list_macros.h>
 #include <ros/ros.h>
+#include <ros/package.h>
 
 namespace franka_example_controllers {
 
@@ -65,6 +69,19 @@ bool CartesianPoseExampleControllerPulse::init(hardware_interface::RobotHW* robo
     return false;
   }
 
+  std::string line;
+  std::string traj_file_path = ros::package::getPath("franka_example_controllers") + "/config/traj.csv";
+  std::ifstream traj_file(traj_file_path);
+  while(getline(traj_file,line))
+  {
+    std::istringstream lineStream(line);
+    double x, z, phi;
+    lineStream >> x >> z >> phi;
+    traj_x.push_back(x);
+    traj_z.push_back(z);
+    traj_phi.push_back(phi);
+  }
+
   return true;
 }
 
@@ -77,16 +94,20 @@ void CartesianPoseExampleControllerPulse::update(const ros::Time& /* time */,
                                             const ros::Duration& period) {
   elapsed_time_ += period;
 
-  double radius = 0.1;
-  double angle = M_PI / 4 * (1 - std::cos(M_PI /  0.6 * elapsed_time_.toSec() - M_PI));
-  double delta_x = radius - radius * std::sin(angle);
-  // double delta_z = radius * (std::cos(angle) - 1);
-  std::array<double, 16> new_pose = initial_pose_;
-  if ((elapsed_time_.toSec() > 11.99999) && (elapsed_time_.toSec() < 13.2))
-  {
-    new_pose[12] += delta_x;
-    // new_pose[14] -= delta_z;
+  index += period.toNSec() / 1000000;
+  if (index >= traj_x.size()) {
+    index = traj_x.size() - 1;
   }
+
+  std::array<double, 16> new_pose = initial_pose_;
+  new_pose[12] -= traj_x[index];
+  new_pose[14] -= traj_z[index];
+  
+  if (index % 50 == 0) {
+    ROS_INFO_STREAM("index: " << index << "\t x: " << traj_x[index] << "\t z:" << traj_z[index] << "\t phi:" << traj_phi[index]);
+    ROS_INFO_STREAM("index: " << index << "\t x: " << new_pose[12] << "\t z:" << new_pose[14]);
+  }
+
   cartesian_pose_handle_->setCommand(new_pose);
   
 }

@@ -5,6 +5,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <controller_interface/multi_interface_controller.h>
 #include <franka_hw/franka_state_interface.h>
@@ -29,6 +30,10 @@ class CartesianPoseExampleControllerPulse
   std::unique_ptr<franka_hw::FrankaCartesianPoseHandle> cartesian_pose_handle_;
   ros::Duration elapsed_time_;
   std::array<double, 16> initial_pose_{};
+  size_t index;
+  std::vector<double> traj_x;
+  std::vector<double> traj_z;
+  std::vector<double> traj_phi;
 };
 
 }  // namespace franka_example_controllers
