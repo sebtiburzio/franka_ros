@@ -4,11 +4,12 @@
   <arg name="robot" default="panda" doc="choose your robot. Possible values: [panda, fr3]"/>
   <arg name="arm_id" default="$(arg robot)" />
   <arg name="load_gripper" default="true" />
+  <arg name="base_offset_z" default="0"/>
   <arg name="use_FT_sensor" default="false" />
   <arg name="FT_prefix" default="ft_sensor0" />
   <arg name="xacro_args" default="" />
 
-  <param name="robot_description" command="$(find xacro)/xacro $(find franka_description)/robots/$(arg robot)/$(arg robot).urdf.xacro hand:=$(arg load_gripper) arm_id:=$(arg arm_id) use_FT_sensor:=$(arg use_FT_sensor) FT_prefix:=$(arg FT_prefix) $(arg xacro_args)"/>
+  <param name="robot_description" command="$(find xacro)/xacro $(find franka_description)/robots/$(arg robot)/$(arg robot).urdf.xacro hand:=$(arg load_gripper) base_offset_z:=$(arg base_offset_z) arm_id:=$(arg arm_id) use_FT_sensor:=$(arg use_FT_sensor) FT_prefix:=$(arg FT_prefix) $(arg xacro_args)"/>
 
   <include file="$(find franka_gripper)/launch/franka_gripper.launch" if="$(arg load_gripper)">
     <arg name="robot_ip" value="$(arg robot_ip)" />
